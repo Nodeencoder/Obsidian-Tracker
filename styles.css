@@ -60,37 +60,3 @@
   color: var(--text-muted);
   font-style: italic;
 }
-
-.settings-section {
-  padding: 20px 0;
-}
-
-.setting-item {
-  display: flex;
-  flex-direction: column;
-  padding: 18px 0;
-  border-bottom: 1px solid var(--background-modifier-border);
-}
-
-.setting-item-info {
-  margin-bottom: 10px;
-}
-
-.setting-item-name {
-  font-weight: 600;
-  margin-bottom: 4px;
-}
-
-.setting-item-description {
-  font-size: 0.9em;
-  color: var(--text-muted);
-}
-
-.setting-item-control input[type="text"] {
-  width: 100%;
-  padding: 6px 10px;
-  border: 1px solid var(--background-modifier-border);
-  border-radius: 4px;
-  background-color: var(--background-primary);
-  color: var(--text-normal);
-}
