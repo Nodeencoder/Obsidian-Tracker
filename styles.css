@@ -1,18 +1,183 @@
 .habit-tracker-container {
   padding: 20px;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  /* let the container fill the pane and allow children to stretch/shrink */
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Make the main tracker container a positioned ancestor so elements like the
+   settings button/menu can be absolutely positioned relative to the pane's
+   top-right corner. */
+.habit-tracker-container {
+  position: relative;
+}
+
+/* Wrapper that contains all rendered views (month/year/today). We set margin-top
+   dynamically from JS to ensure content always starts below the controls bar. */
+.habit-content {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 0;
+}
+
+/* Ensure all sections start at the same vertical point inside the content wrapper.
+   Remove top margins from immediate children and provide a small uniform padding-top
+   so Month/Year/Today/Overview sections align. This prevents one view (e.g. Month)
+   from appearing closer to the controls because of differing inner margins. */
+.habit-content .habit-section {
+  padding-top: 4px;
+}
+.habit-content .habit-section > * {
+  margin-top: 0 !important;
+}
+
+/* Override previous per-view top margins so the first visible block aligns consistently */
+.habit-content .calendar-month {
+  margin-top: 0 !important;
+}
+.habit-content .github-header {
+  margin-top: 0 !important;
+}
+.habit-content .year-overview-header {
+  margin-top: 0 !important;
+}
+.habit-content .today-title {
+  margin-top: 0 !important;
+}
+
+/* Tweak Today view specific containers that had extra spacing */
+.habit-content .today-overview {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+.habit-content .today-cards-container {
+  margin-top: 0 !important;
+}
+.habit-content .habit-name {
+  margin-top: 0 !important;
 }
 
 .habit-controls {
-  margin-bottom: 30px;
-  padding: 15px;
-  background-color: var(--background-secondary);
-  border-radius: 8px;
+  margin-bottom: 10px;
+  padding: 10px;
+  /* remove card background to make controls blend with the panel */
+  background: transparent;
+  border-radius: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap; /* allow controls to wrap so view selector can sit on its own row */
+  overflow-x: visible;
+  align-content: flex-start;
+  min-height: 0;
+}
+
+/* Positioning for the settings button/menu */
+.habit-controls {
+  position: relative; /* contains the absolute-positioned menu */
+}
+
+.controls-right {
   display: flex;
   align-items: center;
-  gap: 15px;
-  flex-wrap: nowrap;
-  overflow-x: visible;
+}
+
+/* Position the settings button in the absolute top-right corner of the pane */
+.habit-settings-button {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  padding: 0; /* no padding so there's no visible box */
+  background: transparent !important; /* force no background */
+  border: none !important;
+  color: var(--text-normal);
+  cursor: pointer;
+  border-radius: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1400;
+  transition: color 140ms ease, opacity 140ms ease, transform 120ms ease;
+}
+.habit-settings-button:hover {
+  color: var(--interactive-accent);
+  opacity: 0.98;
+}
+
+/* Ensure absolutely no visible box, border or outline remains around the icon */
+.habit-settings-button,
+.habit-settings-button * {
+  background: transparent !important;
+  border: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Avoid any subpixel anti-aliasing artifacts by using geometric precision */
+.habit-settings-button svg {
+  shape-rendering: geometricPrecision;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Make SVG icon size match the button and use currentColor for theming */
+.habit-settings-button svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+  margin: 0;
+  display: block;
+  fill: none !important;
+  stroke: currentColor !important;
+  stroke-width: 1.4 !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+  vector-effect: non-scaling-stroke; /* keep stroke uniform when scaled */
+}
+
+/* Lightweight focus style for keyboard users (subtle ring) */
+.habit-settings-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(10,132,255,0.08);
+  border-radius: 6px;
+}
+
+/* settings menu */
+.settings-menu {
+  position: absolute;
+  /* position relative to the top of the pane so the menu appears under the
+     top-right corner where the settings button sits */
+  top: 36px; /* a little below the top edge where the icon sits */
+  right: 8px;
+  background: var(--background-primary);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 8px;
+  box-shadow: 0 8px 26px rgba(0,0,0,0.12);
+  min-width: 180px;
+  z-index: 1300;
+  padding: 6px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.settings-menu.hidden {
+  display: none;
+}
+
+.settings-menu-item {
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--text-normal);
+  font-size: 13px;
+}
+.settings-menu-item:hover {
+  background-color: var(--background-modifier-border-hover);
 }
 
 .habit-control-button {
@@ -24,7 +189,7 @@
   cursor: pointer;
   font-weight: 500;
   white-space: nowrap;
-  flex-shrink: 0;
+  flex-shrink: 1; /* allow buttons to shrink on narrow widths */
 }
 
 .habit-control-button:hover {
@@ -36,13 +201,52 @@
   align-items: center;
   gap: 10px;
   flex-wrap: nowrap;
-  flex-shrink: 0;
+  flex-shrink: 1;
   position: relative;
+  min-width: 0; /* allow inner elements to shrink */
 }
 
 .custom-habit-dropdown {
   position: relative;
   min-width: 200px;
+}
+
+/* Dropdown menu for habit selector: hidden by default, shown when `.show` is added */
+.habit-dropdown-menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  background-color: var(--background-primary);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+  padding: 6px;
+  min-width: 220px;
+  z-index: 1200;
+}
+
+.habit-dropdown-menu.show {
+  display: block;
+}
+
+.habit-dropdown-item {
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--text-normal);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.habit-dropdown-item:hover {
+  background-color: var(--background-modifier-border);
+}
+
+.habit-dropdown-item.active {
+  background-color: var(--interactive-accent);
+  color: var(--text-on-accent);
 }
 
 .habit-dropdown-button {
@@ -58,86 +262,120 @@
   cursor: pointer;
   font-size: 14px;
   transition: all 0.2s ease;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .habit-dropdown-button:hover {
   border-color: var(--interactive-accent);
 }
 
-.habit-dropdown-text {
-  flex: 1;
-  text-align: left;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+/* Calendar Month View */
+.calendar-view {
+  /* allow the month view to expand with the available container width */
+  max-width: 100%;
 }
 
-.habit-dropdown-arrow {
-  margin-left: 8px;
-  font-size: 10px;
-  color: var(--text-muted);
-}
-
-.habit-dropdown-menu {
-  position: absolute;
-  top: calc(100% + 4px);
-  left: 0;
-  right: 0;
-  background-color: var(--background-primary);
-  border: 1px solid var(--background-modifier-border);
-  border-radius: 4px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  max-height: 300px;
-  overflow-y: auto;
-  z-index: 10000; /* Increased z-index to ensure it's on top */
-  display: none;
-}
-
-.habit-dropdown-menu.show {
+.calendar-month {
+  margin-top: 12px;
+  /* Ensure month block fills available width and participates normally in the
+     vertical flow (prevent overlap when the pane resizes). */
   display: block;
+  width: 100%;
+  box-sizing: border-box;
+  flex: 0 0 auto;
 }
 
-.habit-dropdown-item {
+.calendar-weekdays {
+  display: grid;
+  /* responsive 7 columns: allow narrower min width so grid can compress */
+  grid-template-columns: repeat(7, minmax(12px, 1fr));
+  gap: 4px;
+  margin-bottom: 6px;
+  width: 100%;
+}
+
+.calendar-weekday {
+  text-align: center;
+  font-weight: 600;
+  color: var(--text-muted);
+  font-size: 11px;
+  padding: 4px 2px;
+}
+
+.calendar-days-grid {
+  display: grid;
+  /* responsive columns: cells will expand to fill the available width */
+  grid-template-columns: repeat(7, minmax(12px, 1fr));
+  grid-auto-rows: auto; /* allow vertical compression */
+  gap: 4px;
+  width: 100%;
+}
+
+.calendar-day {
+  /* let the grid cell determine size; keep aspect ratio so cells are square */
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  max-width: none; /* allow the grid to shrink both axes uniformly */
+  background-color: var(--background-modifier-border);
+  /* Keep corners visually consistent: use a percentage of the cell but cap with a fixed px
+    - using a percentage ensures the radius scales down with the cell so it never becomes a circle
+    - min(18px, 18%) means: use 18% of the cell (safe, <50%) but never exceed 18px */
+  /* stronger rounding: increase max px and percentage so corners are more rounded */
+  border-radius: min(24px, 24%);
+  cursor: pointer;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 10px 12px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  border-bottom: 1px solid var(--background-modifier-border);
+  justify-content: center;
+  transition: all 0.12s ease;
+  position: relative;
+  box-sizing: border-box;
+  min-height: 0;
 }
 
-.habit-dropdown-item:last-child {
-  border-bottom: none;
+.calendar-day.empty {
+  background-color: transparent;
+  border: none;
+  cursor: default;
 }
 
-.habit-dropdown-item:hover {
-  background-color: var(--background-modifier-hover);
+.calendar-day:not(.empty):hover {
+  /* subtle hover outline like GitHub */
+  outline: 2px solid rgba(0,0,0,0.08);
+  outline-offset: -2px;
 }
 
-.habit-dropdown-item.active {
-  background-color: var(--background-secondary);
+.calendar-day-number {
+  font-size: clamp(9px, 1.0vw, 12px);
   font-weight: 600;
+  color: var(--text-muted);
+  line-height: 1;
+  z-index: 1;
 }
 
-.habit-item-text {
-  flex: 1;
-  color: var(--text-normal);
-  font-size: 14px;
+.calendar-day.completed {
+  background-color: #26a641;
 }
 
-.habit-item-actions {
-  display: flex;
-  gap: 8px;
-  margin-left: 12px;
+.calendar-day.completed .calendar-day-number {
+  color: white;
 }
 
-.habit-action-icon {
-  font-size: 16px;
-  cursor: pointer;
-  opacity: 0.6;
-  transition: all 0.2s ease;
-  padding: 2px;
+/* Today when NOT completed: light green background and green number */
+.calendar-day.today:not(.completed) {
+  background-color: rgba(38,166,65,0.12);
+}
+
+.calendar-day.today:not(.completed) .calendar-day-number {
+  color: #26a641;
+  font-weight: 700;
+}
+
+/* Today when completed: keep completed styling but add a subtle ring */
+.calendar-day.today.completed {
+  box-shadow: 0 0 0 3px rgba(38,166,65,0.12);
 }
 
 .habit-action-icon:hover {
@@ -155,6 +393,242 @@
 
 .habit-section {
   margin-bottom: 40px;
+  min-height: 0;
+  /* Make sections stable inside the flex column container: do not allow them
+     to flex/shrink unexpectedly. This keeps months stacked and prevents overlap. */
+  display: block;
+  position: relative;
+  clear: both;
+  flex: 0 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Today overview styles */
+.today-overview {
+  margin-bottom: 30px;
+}
+
+.today-title {
+  font-size: 26px;
+  margin-bottom: 12px;
+  color: var(--text-normal);
+}
+
+.today-cards-container {
+  display: grid;
+  /* Limit to maximum 2 columns: when there are 3 cards the third will wrap to the next row */
+  grid-template-columns: repeat(2, minmax(140px, 1fr));
+  grid-auto-rows: auto; /* rows size to content, permitting vertical compression */
+  gap: 10px;
+  align-items: start;
+}
+
+.today-card {
+  background-color: var(--background-secondary);
+  /* compact card */
+  border-radius: 12px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: stretch;
+  justify-content: flex-start;
+  min-height: 0; /* allow card to compress vertically */
+  flex: 1 1 auto;
+  /* make card scale proportionally (width -> height) so it compresses in both axes
+     like the month squares. Adjust ratio if you want taller/shorter cards. */
+  aspect-ratio: 3 / 2;
+  align-self: stretch;
+  position: relative; /* so the check button can be absolute-positioned */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.10);
+}
+
+/* Make inner content responsive: allow wrapping and scale fonts/squares */
+.today-card * {
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+.today-card-middle {
+  overflow: hidden;
+}
+
+.today-habit-name {
+  font-size: clamp(12px, 1.6vw, 18px);
+  line-height: 1.1;
+  margin-bottom: 6px;
+}
+
+.today-count-number {
+  font-size: clamp(16px, 3vw, 24px);
+}
+
+.today-week-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-top: 6px;
+  flex-wrap: wrap; /* allow week squares to wrap to new line on narrow widths */
+}
+
+.today-week-square {
+  /* size relative to available width so they shrink with the card */
+  width: min(24px, calc((100% / 7) - 6px));
+  height: auto;
+  aspect-ratio: 1 / 1;
+  flex: 0 1 auto;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.today-week-square .today-week-initial {
+  display: block;
+  line-height: 1;
+  font-weight: 700;
+  text-transform: none;
+  padding: 0 2px;
+  white-space: nowrap;
+}
+
+.today-card-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  width: auto;
+  min-width: 0;
+}
+
+.today-count-number {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--text-on-accent);
+}
+
+.today-count-label {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.today-card-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.today-check-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background-color: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: none;
+  /* place the check in the top-right corner */
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  transition: transform 0.18s cubic-bezier(.2,.9,.3,1), box-shadow 0.18s ease, background-color 0.18s ease;
+}
+
+.today-check-button .today-check-mark {
+  font-size: 18px;
+  color: transparent;
+  display: inline-block;
+  transform: scale(0);
+  transition: transform 0.18s ease, color 0.18s ease, opacity 0.18s ease;
+  opacity: 0;
+}
+
+.today-check-button.active {
+  background-color: #26a641; /* green */
+  box-shadow: 0 8px 20px rgba(38,166,65,0.18);
+  transform: translateY(-2px) scale(1.02);
+}
+
+.today-check-button.active .today-check-mark {
+  color: white;
+  transform: scale(1);
+  opacity: 1;
+}
+
+.today-card-middle {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+}
+
+.today-habit-name {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-normal);
+  margin-bottom: 6px;
+}
+
+.today-week-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 6px;
+}
+
+.today-week-square {
+  width: 24px;
+  height: 24px;
+  background-color: var(--background-modifier-border);
+  border-radius: 8px;
+  transition: background-color 0.14s ease, transform 0.14s ease, box-shadow 0.14s ease;
+}
+
+.today-week-square.completed {
+  background-color: #26a641;
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 6px 14px rgba(38,166,65,0.14);
+}
+
+.today-week-square.today:not(.completed) {
+  background-color: rgba(38,166,65,0.12);
+  outline: 2px solid rgba(38,166,65,0.18);
+  transform: translateY(-1px);
+}
+
+/* When today is completed, make the entire card visually active (blue) */
+.today-card.active-today {
+  background: linear-gradient(180deg, #04253a 0%, #072a42 100%);
+  color: white;
+}
+
+.today-card.active-today .today-habit-name {
+  color: #ffffff;
+}
+
+.today-card.active-today .today-count-number {
+  color: #ffffff;
+}
+
+/* If the card is active-today, style the check button as blue */
+.today-card.active-today .today-check-button.active {
+  background-color: #0a84ff; /* iOS blue */
+  box-shadow: 0 10px 26px rgba(10,132,255,0.18);
+}
+
+.today-card.active-today .today-week-square.today:not(.completed) {
+  /* subtle blue tint for today's square when the card is active */
+  background-color: rgba(10,132,255,0.12);
+  outline: 2px solid rgba(10,132,255,0.18);
+}
+
+.today-week-count {
+  font-size: 13px;
+  color: var(--text-muted);
+  align-self: center;
 }
 
 .habit-name {
@@ -170,13 +644,19 @@
 }
 
 .github-header {
-  margin-bottom: 20px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* keep items on same line, start-aligned */
+  gap: 12px; /* small gap between name and selector */
 }
 
 .github-year-container {
+  /* Stack the year selector above the graph so it sits centered over the squares */
   display: flex;
-  gap: 20px;
-  align-items: flex-start;
+  flex-direction: column;
+  gap: 12px;
+  align-items: stretch;
 }
 
 .github-graph-container {
@@ -211,6 +691,8 @@
 .github-grid-wrapper {
   display: flex;
   gap: 8px;
+  align-items: flex-start;
+  flex-wrap: wrap;
 }
 
 .github-day-labels {
@@ -235,15 +717,80 @@
   grid-auto-flow: column;
   grid-auto-columns: 12px;
   gap: 3px;
+  grid-auto-rows: auto;
+}
+
+/* Square 18x30 year view grid (row-major) */
+.github-square-grid {
+  display: grid;
+  grid-template-columns: repeat(30, 12px);
+  grid-template-rows: repeat(18, 12px);
+  gap: 3px;
+  /* Ensure the grid content is left-aligned and starts at the top so it doesn't
+     appear centered or spread when the container is wider than the grid. */
+  justify-content: start;
+  align-content: start;
 }
 
 .github-cell {
   width: 12px;
   height: 12px;
   background-color: var(--background-modifier-border);
-  border-radius: 2px;
+  /* small rounded-square (not a full circle) */
+  border-radius: 3px;
   cursor: pointer;
-  transition: all 0.1s ease;
+  transition: all 0.12s ease, transform 0.12s ease;
+}
+
+/* calendar header styling (month title + habit) */
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* Inline month navigation placed next to the month label (prev - label - next)
+   Used in per-habit headers in Month view */
+.month-nav-inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+}
+
+.month-nav-inline .month-nav-button {
+  padding: 4px 8px;
+  background-color: var(--background-modifier-border);
+  color: var(--text-normal);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.month-nav-inline .calendar-month-title {
+  margin: 0 6px;
+  display: inline-block;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.calendar-header-title {
+  flex: 1 1 auto;
+  text-align: center;
+}
+
+.calendar-month-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-normal);
+}
+
+.calendar-habit-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--interactive-accent);
 }
 
 .github-cell:hover:not(.outside-year) {
@@ -268,9 +815,12 @@
 /* Year Selector */
 .github-year-selector {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
-  min-width: 60px;
+  flex-direction: row;
+  gap: 6px;
+  align-items: center;
+  justify-content: flex-start; /* align near the habit name */
+  min-width: auto;
+  margin-left: 8px; /* small spacing from the habit name */
 }
 
 .github-year-button {
@@ -350,6 +900,26 @@
   font-style: italic;
 }
 
+.habit-color-swatches {
+  display: flex;
+  gap: 8px;
+  margin: 10px 0 14px 0;
+}
+
+.color-swatch {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+
+.color-swatch.selected {
+  box-shadow: 0 6px 18px rgba(0,0,0,0.22);
+  transform: translateY(-2px);
+  border-color: rgba(255,255,255,0.12);
+}
+
 .habit-error-message {
   color: var(--text-error);
   padding: 10px;
@@ -365,8 +935,15 @@
   align-items: center;
   gap: 10px;
   flex-wrap: nowrap;
-  flex-shrink: 0;
+  flex-shrink: 1;
   margin-left: auto;
+}
+
+/* Ensure view controls sit on their own row below the main buttons */
+.view-controls-container {
+  flex-basis: 100%;
+  margin-top: 10px;
+  margin-left: 0;
 }
 
 .view-selector-label {
@@ -401,8 +978,17 @@
 }
 
 .view-radio-input {
-  cursor: pointer;
-  margin: 0;
+  /* visually hide the native radio control but keep it accessible for screen readers
+     and keyboard focus. The label styling will indicate the selected state. */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .view-radio-input:checked + .view-radio-text {
@@ -425,12 +1011,34 @@
   transition: all 0.2s ease;
 }
 
+/* Keep the Year Overview selector a fixed width so it doesn't grow/shrink when the bar narrows */
+.view-radio-year-overview {
+  /* Fixed box: do not grow or shrink when the container becomes narrow */
+  box-sizing: border-box;
+  flex: 0 0 80px; /* no grow, no shrink, fixed basis */
+  width: 80px;
+  min-width: 80px;
+  max-width: 80px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 8px; /* keep consistent with other labels */
+  overflow: hidden;
+}
+
+.view-radio-year-overview .view-radio-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+}
+
 .month-navigation {
   display: flex;
   align-items: center;
   gap: 8px;
   flex-wrap: nowrap;
-  flex-shrink: 0;
+  flex-shrink: 1;
 }
 
 .month-nav-button {
@@ -455,152 +1063,155 @@
 .month-label-text {
   font-weight: 500;
   color: var(--text-normal);
-  min-width: 150px;
+  min-width: 0;
   text-align: center;
 }
 
-/* Calendar Month View */
-.calendar-view {
-  max-width: 800px;
-}
 
-.calendar-month {
-  margin-top: 20px;
-}
-
-.calendar-weekdays {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 8px;
-  margin-bottom: 8px;
-}
-
-.calendar-weekday {
-  text-align: center;
-  font-weight: 600;
-  color: var(--text-muted);
-  font-size: 12px;
-  padding: 8px;
-}
-
-.calendar-days-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 8px;
-}
-
-.calendar-day {
-  aspect-ratio: 1;
-  background-color: var(--background-secondary);
-  border: 2px solid var(--background-modifier-border);
-  border-radius: 4px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-  position: relative;
-  min-height: 60px;
-}
-
-.calendar-day.empty {
-  background-color: transparent;
-  border: none;
-  cursor: default;
-}
-
-.calendar-day:not(.empty):hover {
-  border-color: var(--interactive-accent);
-  transform: scale(1.05);
-}
-
-.calendar-day-number {
-  font-size: 18px;
-  font-weight: 500;
-  color: var(--text-normal);
-}
-
-.calendar-day.completed {
-  background-color: #26a641;
-  border-color: #26a641;
-}
-
-.calendar-day.completed .calendar-day-number {
-  color: white;
-  font-weight: 600;
-}
-
-.calendar-day.today {
-  border-color: var(--text-accent);
-  border-width: 3px;
-}
 
 /* Year Overview */
 .year-overview-header {
-  margin-bottom: 20px;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.year-overview-year-label {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--interactive-accent);
+}
+
+/* Habit navigation arrows in the Year Overview header */
+.habit-year-nav {
+  display: inline-flex;
+  gap: 6px;
+  margin-left: 10px;
+  align-items: center;
+}
+.habit-year-nav .habit-nav-button {
+  background: transparent;
+  border: 1px solid var(--background-modifier-border);
+  color: var(--text-normal);
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+}
+.habit-year-nav .habit-nav-button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* Place the habit nav inline to the right of the habit name in the Year Overview
+   header. Ensure the name and the nav sit on the same row. */
+.year-overview-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.year-overview-header-left .habit-name {
+  margin-bottom: 0; /* remove the global bottom margin so nav sits inline */
 }
 
 .year-overview-container {
   display: flex;
-  gap: 20px;
-  align-items: flex-start;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
 }
 
 .year-overview-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 20px;
-  flex: 1;
+  /* 3 columns like the screenshot: Jan/Feb/Mar across, etc. */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  align-items: stretch;
+  /* 4 rows (12 months) share available vertical space so bottom months reach the bottom */
+  grid-template-rows: repeat(4, 1fr);
+  height: 100%;
 }
 
 .year-overview-month {
-  background-color: var(--background-secondary);
-  border-radius: 8px;
-  padding: 15px;
+  /* each month tile stretches to fill its grid row */
+  background: transparent;
+  border-radius: 6px;
+  padding: 6px 6px;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  height: 100%;
 }
 
 .year-overview-month-name {
-  font-weight: 600;
-  font-size: 15px;
-  margin-bottom: 12px;
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 8px;
   color: var(--text-normal);
-  text-align: center;
+  text-align: left;
 }
 
 .year-overview-days {
   display: grid;
+  /* 7 columns for weekdays: each column is fractional so it scales with month width */
   grid-template-columns: repeat(7, 1fr);
-  gap: 4px;
+  /* rows size to content (squares provided by children) */
+  grid-auto-rows: auto;
+  gap: 6px;
+  flex: 0 1 auto;
+  min-height: 0;
+  align-content: start;
 }
 
 .year-overview-day {
-  aspect-ratio: 1;
   background-color: var(--background-modifier-border);
-  border-radius: 50%;
+  border-radius: 4px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  min-height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  transition: background-color 0.12s ease, transform 0.12s ease;
+  min-height: 0;
+  display: block;
   position: relative;
+  width: 100%;
 }
 
 .year-overview-day-number {
-  font-size: 11px;
-  color: var(--text-muted);
-  font-weight: 500;
-  z-index: 1;
+  display: none; /* hide numbers to match compact grid in screenshot */
+}
+
+/* Ensure days scale inside the months: use relative sizing and allow compression */
+.year-overview-day {
+  width: 100%;
+  max-width: 100%;
+  min-height: 0;
+}
+
+/* Keep each day square by using padding-top to enforce a 1:1 ratio based on column width */
+.year-overview-day::before {
+  content: '';
+  display: block;
+  padding-top: 100%; /* creates square box relative to width */
+}
+
+.year-overview-day > * {
+  /* position inner content (like the hidden number) over the square */
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .year-overview-day:hover {
-  transform: scale(1.1);
-  border: 2px solid var(--text-muted);
+  transform: translateY(-2px);
   z-index: 2;
 }
 
 .year-overview-day.completed {
-  background-color: #26a641;
+  /* default completed color kept; per-habit colors override inline */
+  background-color: var(--interactive-accent);
 }
 
 .year-overview-day.completed .year-overview-day-number {
@@ -609,7 +1220,14 @@
 }
 
 .year-overview-day.today {
-  border: 2px solid var(--text-accent);
+  outline: 2px solid var(--text-accent);
+  outline-offset: 2px;
+}
+
+/* Dim future months, but keep them clickable so they can be unlocked individually */
+.year-overview-month.upcoming {
+  opacity: 0.28;
+  filter: grayscale(30%);
 }
 
 /* Year Overview Year Selector */
@@ -647,4 +1265,74 @@
 .year-overview-year-button.current-year:not(.active) {
   border-color: var(--interactive-accent);
   color: var(--text-normal);
+}
+
+/* Responsive tweaks: tighter spacing and smaller elements on narrower widths */
+@media (max-width: 900px) {
+  .today-cards-container {
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 8px;
+  }
+
+  .today-card {
+    padding: 8px;
+  }
+
+  .today-count-number {
+    font-size: 20px;
+  }
+
+  .today-week-square {
+    width: 20px;
+    height: 20px;
+  }
+
+  .view-radio-label {
+    padding: 6px 10px;
+  }
+
+  .calendar-weekdays,
+  .calendar-days-grid {
+    grid-template-columns: repeat(7, minmax(14px, 1fr));
+  }
+
+  .calendar-day {
+    /* keep same fixed rounding on smaller viewports so it remains visually consistent */
+    border-radius: 18px;
+  }
+}
+
+@media (max-width: 600px) {
+  .today-cards-container {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .today-card {
+    padding: 6px;
+    gap: 6px;
+  }
+
+  .today-count-number {
+    font-size: 18px;
+  }
+
+  .today-week-square {
+    width: 16px;
+    height: 16px;
+  }
+
+  .habit-control-button {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+
+  .view-radio-label {
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+
+  .year-overview-grid {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+  }
 }

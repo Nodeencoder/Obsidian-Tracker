@@ -4,9 +4,9 @@ export interface HabitTrackerSettings {
 
 export interface HabitData {
   habits?: string[];
-  [habitName: string]: {
-    [date: string]: boolean;
-  } | string[] | undefined;
+  colors?: { [habitName: string]: string };
+  // habit entries map to date->boolean, but allow any for flexibility
+  [habitName: string]: any;
 }
 
 export const DEFAULT_SETTINGS: HabitTrackerSettings = {
