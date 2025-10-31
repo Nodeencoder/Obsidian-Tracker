@@ -1,0 +1,650 @@
+.habit-tracker-container {
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.habit-controls {
+  margin-bottom: 30px;
+  padding: 15px;
+  background-color: var(--background-secondary);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: nowrap;
+  overflow-x: visible;
+}
+
+.habit-control-button {
+  padding: 8px 16px;
+  background-color: var(--interactive-accent);
+  color: var(--text-on-accent);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.habit-control-button:hover {
+  background-color: var(--interactive-accent-hover);
+}
+
+.habit-selector-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.custom-habit-dropdown {
+  position: relative;
+  min-width: 200px;
+}
+
+.habit-dropdown-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 8px 12px;
+  background-color: var(--background-primary);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 4px;
+  color: var(--text-normal);
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.habit-dropdown-button:hover {
+  border-color: var(--interactive-accent);
+}
+
+.habit-dropdown-text {
+  flex: 1;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.habit-dropdown-arrow {
+  margin-left: 8px;
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.habit-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background-color: var(--background-primary);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 10000; /* Increased z-index to ensure it's on top */
+  display: none;
+}
+
+.habit-dropdown-menu.show {
+  display: block;
+}
+
+.habit-dropdown-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.habit-dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.habit-dropdown-item:hover {
+  background-color: var(--background-modifier-hover);
+}
+
+.habit-dropdown-item.active {
+  background-color: var(--background-secondary);
+  font-weight: 600;
+}
+
+.habit-item-text {
+  flex: 1;
+  color: var(--text-normal);
+  font-size: 14px;
+}
+
+.habit-item-actions {
+  display: flex;
+  gap: 8px;
+  margin-left: 12px;
+}
+
+.habit-action-icon {
+  font-size: 16px;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: all 0.2s ease;
+  padding: 2px;
+}
+
+.habit-action-icon:hover {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+.edit-icon:hover {
+  filter: brightness(1.2);
+}
+
+.delete-icon:hover {
+  filter: brightness(1.2);
+}
+
+.habit-section {
+  margin-bottom: 40px;
+}
+
+.habit-name {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: var(--text-normal);
+}
+
+/* GitHub Style Contribution Graph */
+.github-style {
+  max-width: 100%;
+}
+
+.github-header {
+  margin-bottom: 20px;
+}
+
+.github-year-container {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.github-graph-container {
+  flex: 1;
+  overflow-x: auto;
+}
+
+.github-month-labels {
+  display: flex;
+  margin-bottom: 4px;
+  padding-left: 32px;
+}
+
+.github-days-label-spacer {
+  width: 32px;
+}
+
+.github-month-label-container {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 12px;
+  gap: 3px;
+  flex: 1;
+}
+
+.github-month-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  grid-row: 1;
+}
+
+.github-grid-wrapper {
+  display: flex;
+  gap: 8px;
+}
+
+.github-day-labels {
+  display: grid;
+  grid-template-rows: repeat(7, 12px);
+  gap: 3px;
+  width: 32px;
+  padding-top: 0;
+}
+
+.github-day-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-align: right;
+  padding-right: 8px;
+  line-height: 12px;
+}
+
+.github-contribution-grid {
+  display: grid;
+  grid-template-rows: repeat(7, 12px);
+  grid-auto-flow: column;
+  grid-auto-columns: 12px;
+  gap: 3px;
+}
+
+.github-cell {
+  width: 12px;
+  height: 12px;
+  background-color: var(--background-modifier-border);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+
+.github-cell:hover:not(.outside-year) {
+  outline: 2px solid var(--text-muted);
+  outline-offset: -1px;
+}
+
+.github-cell.completed {
+  background-color: #26a641;
+}
+
+.github-cell.today {
+  outline: 2px solid var(--text-accent);
+  outline-offset: 0px;
+}
+
+.github-cell.outside-year {
+  background-color: transparent;
+  cursor: default;
+}
+
+/* Year Selector */
+.github-year-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 60px;
+}
+
+.github-year-button {
+  padding: 4px 8px;
+  background-color: transparent;
+  color: var(--text-muted);
+  border: 1px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.github-year-button:hover {
+  background-color: var(--background-modifier-border);
+  color: var(--text-normal);
+}
+
+.github-year-button.active {
+  background-color: var(--interactive-accent);
+  color: var(--text-on-accent);
+  border-color: var(--interactive-accent);
+  font-weight: 600;
+}
+
+.github-year-button.current-year:not(.active) {
+  border-color: var(--interactive-accent);
+  color: var(--text-normal);
+}
+
+/* Legacy styles for backward compatibility */
+.contribution-grid {
+  display: grid;
+  grid-template-columns: repeat(53, 14px);
+  gap: 3px;
+  margin-bottom: 10px;
+}
+
+.contribution-cell {
+  width: 14px;
+  height: 14px;
+  background-color: var(--background-modifier-border);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.contribution-cell:hover {
+  border: 1px solid var(--text-muted);
+}
+
+.contribution-cell.completed {
+  background-color: #26a641;
+}
+
+.contribution-cell.today {
+  border: 2px solid var(--text-accent);
+}
+
+.month-labels {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  margin-bottom: 5px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.month-label {
+  text-align: center;
+}
+
+.no-habits-message {
+  padding: 20px;
+  text-align: center;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.habit-error-message {
+  color: var(--text-error);
+  padding: 10px;
+  margin-top: 10px;
+  background-color: var(--background-modifier-error);
+  border-radius: 4px;
+  text-align: center;
+}
+
+/* View Controls */
+.view-controls-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.view-selector-label {
+  font-weight: 500;
+  color: var(--text-normal);
+  white-space: nowrap;
+}
+
+.view-radio-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+.view-radio-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background-color: var(--background-modifier-border);
+  border: 2px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.view-radio-label:hover {
+  background-color: var(--background-modifier-border-hover);
+  border-color: var(--interactive-accent);
+}
+
+.view-radio-input {
+  cursor: pointer;
+  margin: 0;
+}
+
+.view-radio-input:checked + .view-radio-text {
+  font-weight: 600;
+  color: var(--interactive-accent);
+}
+
+.view-radio-label:has(.view-radio-input:checked) {
+  background-color: var(--interactive-accent);
+  border-color: var(--interactive-accent);
+}
+
+.view-radio-label:has(.view-radio-input:checked) .view-radio-text {
+  color: var(--text-on-accent);
+}
+
+.view-radio-text {
+  font-size: 13px;
+  color: var(--text-normal);
+  transition: all 0.2s ease;
+}
+
+.month-navigation {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+}
+
+.month-nav-button {
+  padding: 4px 10px;
+  background-color: var(--background-modifier-border);
+  color: var(--text-normal);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.month-nav-button:hover {
+  background-color: var(--background-modifier-border-hover);
+}
+
+.month-nav-button.today-button {
+  padding: 4px 12px;
+  font-size: 12px;
+}
+
+.month-label-text {
+  font-weight: 500;
+  color: var(--text-normal);
+  min-width: 150px;
+  text-align: center;
+}
+
+/* Calendar Month View */
+.calendar-view {
+  max-width: 800px;
+}
+
+.calendar-month {
+  margin-top: 20px;
+}
+
+.calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.calendar-weekday {
+  text-align: center;
+  font-weight: 600;
+  color: var(--text-muted);
+  font-size: 12px;
+  padding: 8px;
+}
+
+.calendar-days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+}
+
+.calendar-day {
+  aspect-ratio: 1;
+  background-color: var(--background-secondary);
+  border: 2px solid var(--background-modifier-border);
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  position: relative;
+  min-height: 60px;
+}
+
+.calendar-day.empty {
+  background-color: transparent;
+  border: none;
+  cursor: default;
+}
+
+.calendar-day:not(.empty):hover {
+  border-color: var(--interactive-accent);
+  transform: scale(1.05);
+}
+
+.calendar-day-number {
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--text-normal);
+}
+
+.calendar-day.completed {
+  background-color: #26a641;
+  border-color: #26a641;
+}
+
+.calendar-day.completed .calendar-day-number {
+  color: white;
+  font-weight: 600;
+}
+
+.calendar-day.today {
+  border-color: var(--text-accent);
+  border-width: 3px;
+}
+
+/* Year Overview */
+.year-overview-header {
+  margin-bottom: 20px;
+}
+
+.year-overview-container {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.year-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  flex: 1;
+}
+
+.year-overview-month {
+  background-color: var(--background-secondary);
+  border-radius: 8px;
+  padding: 15px;
+}
+
+.year-overview-month-name {
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 12px;
+  color: var(--text-normal);
+  text-align: center;
+}
+
+.year-overview-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.year-overview-day {
+  aspect-ratio: 1;
+  background-color: var(--background-modifier-border);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.year-overview-day-number {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 500;
+  z-index: 1;
+}
+
+.year-overview-day:hover {
+  transform: scale(1.1);
+  border: 2px solid var(--text-muted);
+  z-index: 2;
+}
+
+.year-overview-day.completed {
+  background-color: #26a641;
+}
+
+.year-overview-day.completed .year-overview-day-number {
+  color: white;
+  font-weight: 600;
+}
+
+.year-overview-day.today {
+  border: 2px solid var(--text-accent);
+}
+
+/* Year Overview Year Selector */
+.year-overview-year-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 60px;
+}
+
+.year-overview-year-button {
+  padding: 4px 8px;
+  background-color: transparent;
+  color: var(--text-muted);
+  border: 1px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.year-overview-year-button:hover {
+  background-color: var(--background-modifier-border);
+  color: var(--text-normal);
+}
+
+.year-overview-year-button.active {
+  background-color: var(--interactive-accent);
+  color: var(--text-on-accent);
+  border-color: var(--interactive-accent);
+  font-weight: 600;
+}
+
+.year-overview-year-button.current-year:not(.active) {
+  border-color: var(--interactive-accent);
+  color: var(--text-normal);
+}

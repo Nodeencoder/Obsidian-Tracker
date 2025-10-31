@@ -1,0 +1,10 @@
+{
+  "id": "habit-tracker",
+  "name": "Habit Tracker",
+  "version": "1.0.0",
+  "minAppVersion": "0.15.0",
+  "description": "Track your habits with a GitHub-style contribution tracker",
+  "author": "Your Name",
+  "authorUrl": "",
+  "isDesktopOnly": false
+}

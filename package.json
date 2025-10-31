@@ -1,0 +1,27 @@
+{
+  "name": "obsidian-habit-tracker",
+  "version": "1.0.0",
+  "description": "Track your habits with a GitHub-style contribution tracker in Obsidian",
+  "main": "main.js",
+  "scripts": {
+    "dev": "node esbuild.config.mjs",
+    "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production"
+  },
+  "keywords": [
+    "obsidian",
+    "obsidian-plugin",
+    "habit-tracker"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^24.8.1",
+    "@typescript-eslint/eslint-plugin": "^5.29.0",
+    "@typescript-eslint/parser": "^5.29.0",
+    "builtin-modules": "^3.3.0",
+    "esbuild": "^0.17.3",
+    "obsidian": "^1.10.0",
+    "tslib": "^2.4.0",
+    "typescript": "^5.5.3"
+  }
+}
