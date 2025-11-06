@@ -13,6 +13,9 @@ export class HabitDataStore {
     if (!this.data.habits) {
       this.data.habits = [];
     }
+    if (!this.data.colors) {
+      this.data.colors = {};
+    }
   }
 
   getData(): HabitData {
@@ -49,6 +52,9 @@ export class HabitDataStore {
 
     this.data.habits.splice(index, 1);
     delete this.data[habitName];
+    if (this.data.colors && this.data.colors[habitName]) {
+      delete this.data.colors[habitName];
+    }
     this.saveCallback();
     return true;
   }
@@ -70,6 +76,11 @@ export class HabitDataStore {
       this.data[trimmedNewName] = this.data[oldName];
       delete this.data[oldName];
     }
+    // move color if present
+    if (this.data.colors && this.data.colors[oldName]) {
+      this.data.colors[trimmedNewName] = this.data.colors[oldName];
+      delete this.data.colors[oldName];
+    }
 
     this.saveCallback();
     return true;
@@ -87,6 +98,16 @@ export class HabitDataStore {
     this.saveCallback();
 
     return habitData[date];
+  }
+
+  getHabitColor(habitName: string): string | undefined {
+    return this.data.colors ? this.data.colors[habitName] : undefined;
+  }
+
+  setHabitColor(habitName: string, color: string): void {
+    if (!this.data.colors) this.data.colors = {};
+    this.data.colors[habitName] = color;
+    this.saveCallback();
   }
 
   isHabitCompleted(habitName: string, date: string): boolean {
