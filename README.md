@@ -58,9 +58,10 @@ Your new habit will be automatically selected and ready for tracking.
     2.  Click the **"Delete"** button in the control bar.
     3.  A confirmation modal will appear. Click **"Delete"** to permanently remove the habit and all its associated data.
 
-## Installation
+Installation (Not Yet Active)
+⚠️ This plugin is not available in Obsidian Community Plugins yet, but you can install it manually.
 
-### From Obsidian Community Plugins
+### From Obsidian Community Plugins (Planned)
 
 1.  Go to `Settings` > `Community Plugins`.
 2.  Disable `Safe mode`.
