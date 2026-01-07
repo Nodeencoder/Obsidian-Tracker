@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # Obsidian Tracker Plugin
+=======
+# Greenit Plugin for Obsidian
+>>>>>>> feature/nodeencoder-from-main
 
 A feature-rich plugin for Obsidian that helps you track your daily habits with an intuitive and visually appealing interface.
 
@@ -14,10 +18,13 @@ A feature-rich plugin for Obsidian that helps you track your daily habits with a
 - **Streak Calculation**: The plugin automatically calculates and displays your current habit streak (visible in the GitHub-style view).
 - **Responsive Design**: The interface adapts to different screen sizes and Obsidian themes.
 
+<<<<<<< HEAD
 
 <img width="1143" height="546" alt="habitracker" src="https://github.com/user-attachments/assets/a1cf8279-6542-4cad-8a23-56d0448e2eda" />
 
 
+=======
+>>>>>>> feature/nodeencoder-from-main
 ## How to Use
 
 ### 1. Open the Habit Tracker
