@@ -1,4 +1,3 @@
-
 # Obsidian Tracker Plugin
 
 A feature-rich plugin for Obsidian that helps you track your daily habits with an intuitive and visually appealing interface.
@@ -14,8 +13,6 @@ A feature-rich plugin for Obsidian that helps you track your daily habits with a
 - **Automatic Data Persistence**: All your habit data is automatically saved and loaded with your vault. No manual configuration files needed.
 - **Streak Calculation**: The plugin automatically calculates and displays your current habit streak (visible in the GitHub-style view).
 - **Responsive Design**: The interface adapts to different screen sizes and Obsidian themes.
-
-
 
 <img width="1143" height="546" alt="habitracker" src="https://github.com/user-attachments/assets/a1cf8279-6542-4cad-8a23-56d0448e2eda" />
 
@@ -58,7 +55,8 @@ Your new habit will be automatically selected and ready for tracking.
     2.  Click the **"Delete"** button in the control bar.
     3.  A confirmation modal will appear. Click **"Delete"** to permanently remove the habit and all its associated data.
 
-Installation (Not Yet Active)
+## Installation (Not Yet Active)
+
 ⚠️ This plugin is not available in Obsidian Community Plugins yet, but you can install it manually.
 
 ### From Obsidian Community Plugins (Planned)
@@ -71,7 +69,7 @@ Installation (Not Yet Active)
 
 ### Manual Installation
 
-1.  Download the latest release files (`main.js`, `manifest.json`, `styles.css`) from the [GitHub repository](https://github.com/rengas/habit-tracker-obsidian/releases).
+1.  Download the latest release files (`main.js`, `manifest.json`, `styles.css`) from the [GitHub repository](https://github.com/Nodeencoder/Obsidian-Tracker/releases).
 2.  Create a new folder named `habit-tracker-obsidian` inside your vault's `.obsidian/plugins/` directory.
 3.  Copy the downloaded files into the `habit-tracker-obsidian` folder.
 4.  Reload Obsidian (`Ctrl+R` or `Cmd+R`).
@@ -83,8 +81,8 @@ To set up the development environment and build the plugin:
 
 ```bash
 # Clone the repository
-git clone https://github.com/rengas/habit-tracker-obsidian.git
-cd habit-tracker-obsidian
+git clone https://github.com/Nodeencoder/Obsidian-Tracker.git
+cd Obsidian-Tracker
 
 # Install dependencies
 npm install
