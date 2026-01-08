@@ -69,11 +69,12 @@ Your new habit will be automatically selected and ready for tracking.
 
 ### Manual Installation
 
-1.  Download the latest release files (`main.js`, `manifest.json`, `styles.css`) from the [GitHub repository](https://github.com/Nodeencoder/Obsidian-Tracker/releases).
-2.  Create a new folder named `habit-tracker-obsidian` inside your vault's `.obsidian/plugins/` directory.
-3.  Copy the downloaded files into the `habit-tracker-obsidian` folder.
-4.  Reload Obsidian (`Ctrl+R` or `Cmd+R`).
-5.  Enable the plugin in `Settings` > `Community Plugins`.
+1. Download the latest release files (`main.js`, `manifest.json`, `styles.css`) from the [GitHub release page](https://github.com/Nodeencoder/Obsidian-Tracker/releases/tag/v0.1.0)
+2. Create a new folder named `obsidian-tracker` inside your vault's `.obsidian/plugins/` directory
+3. Copy the downloaded files into the folder
+4. Reload Obsidian (`Ctrl+R` / `Cmd+R`)
+5. Enable the plugin in **Settings → Community Plugins**
+
 
 ## Development
 
